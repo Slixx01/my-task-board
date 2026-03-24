@@ -18,7 +18,7 @@ namespace TaskBoardApi.Controllers
             _context = context;
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetBoard(Guid id)
         {
             var board = await _context.Boards.Include(b => b.Tasks).FirstOrDefaultAsync(b => b.Id == id);
@@ -42,7 +42,7 @@ namespace TaskBoardApi.Controllers
                     Status = t.Status,
                     Icon = t.Icon,
                 }).ToList()
-                
+
 
             };
 
@@ -60,7 +60,7 @@ namespace TaskBoardApi.Controllers
                 Description = dto.Description,
 
             };
-            board.Tasks.Add(new TaskItem 
+            board.Tasks.Add(new TaskItem
             {
                 Name = "Task in Progress",
                 Description = "Work that i currently being done",
@@ -90,8 +90,74 @@ namespace TaskBoardApi.Controllers
             });
 
 
+            _context.Add(board);
+            await _context.SaveChangesAsync();
 
-            return Ok();
+            return CreatedAtAction(nameof(GetBoard), new { id = board.Id }, new BoardResponseDto
+            {
+                Id = board.Id,
+                Name = board.Name,
+                Description = board.Description,
+                CreatedAt = board.CreatedAt,
+                Items = board.Tasks.Select(t => new TaskResponseDto
+                {
+                    Id = t.Id,
+                    BoardId = t.BoardId,
+                    AttachmentUrl = t.AttachmentUrl,
+                    DisplayOrder = t.DisplayOrder,
+                    CreatedAt = t.CreatedAt,
+                    Name = t.Name,
+                    Description = t.Description,
+                    Status = t.Status,
+                    Icon = t.Icon,
+                }).ToList()
+            });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBoard([FromBody] UpdateBoardDto dto, Guid id)
+        {
+            var board = await _context.Boards.Include(b => b.Tasks).FirstOrDefaultAsync(b => b.Id == id);
+            if (board == null) { return NotFound(); }
+
+            board.Name = dto.Name;
+            board.Description = dto.Description;
+
+            await _context.SaveChangesAsync();
+            var boardDto = new BoardResponseDto
+            {
+                Id = id,
+                Name = board.Name,
+                Description = board.Description,
+                CreatedAt = board.CreatedAt,
+                Items = board.Tasks.Select(t => new TaskResponseDto
+                {
+                    Id = t.Id,
+                    BoardId = t.BoardId,
+                    AttachmentUrl = t.AttachmentUrl,
+                    DisplayOrder = t.DisplayOrder,
+                    CreatedAt = t.CreatedAt,
+                    Name = t.Name,
+                    Description = t.Description,
+                    Status = t.Status,
+                    Icon = t.Icon,
+                }).ToList()
+
+            };
+
+            return Ok(boardDto);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBoard(Guid id)
+        {
+            var board = await _context.Boards.Include(b => b.Tasks).FirstOrDefaultAsync(b => b.Id == id);
+            if (board == null) { return NotFound(); }
+
+            _context.Boards.Remove(board);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

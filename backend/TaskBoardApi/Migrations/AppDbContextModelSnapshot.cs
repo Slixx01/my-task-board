@@ -40,7 +40,7 @@ namespace TaskBoardApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Boards");
+                    b.ToTable("Boards", (string)null);
                 });
 
             modelBuilder.Entity("TaskBoardApi.Models.TaskItem", b =>
@@ -80,7 +80,7 @@ namespace TaskBoardApi.Migrations
 
                     b.HasIndex("BoardId");
 
-                    b.ToTable("TaskItems");
+                    b.ToTable("TaskItems", (string)null);
                 });
 
             modelBuilder.Entity("TaskBoardApi.Models.TaskItem", b =>

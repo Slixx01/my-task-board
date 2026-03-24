@@ -3,8 +3,16 @@ using TaskBoardApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add controllers 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
+
+
 // Add services to the container
-builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -24,6 +32,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
