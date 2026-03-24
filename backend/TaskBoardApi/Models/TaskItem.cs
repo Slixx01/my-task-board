@@ -7,7 +7,7 @@
         public string Name { get; set; } = string.Empty; 
         public string? Description { get; set; }
         public string Icon { get; set; } = "📋"; 
-        public string Status { get; set; } = "InProgress"; 
+        public BoardTaskStatus Status { get; set;  } = BoardTaskStatus.InProgress; 
         public string? AttachmentUrl { get; set; }
         public int DisplayOrder { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 

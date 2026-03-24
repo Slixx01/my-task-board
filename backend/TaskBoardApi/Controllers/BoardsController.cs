@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskBoardApi.Data;
 using TaskBoardApi.DTOs;
+using TaskBoardApi.Models;
 
 namespace TaskBoardApi.Controllers
 {
@@ -29,8 +30,8 @@ namespace TaskBoardApi.Controllers
                 Name = board.Name,
                 Description = board.Description,
                 CreatedAt = board.CreatedAt,
-                Items = board.Tasks.Select(t => new TaskResponseDto 
-                { 
+                Items = board.Tasks.Select(t => new TaskResponseDto
+                {
                     Id = t.Id,
                     BoardId = t.BoardId,
                     AttachmentUrl = t.AttachmentUrl,
@@ -41,10 +42,56 @@ namespace TaskBoardApi.Controllers
                     Status = t.Status,
                     Icon = t.Icon,
                 }).ToList()
-
+                
 
             };
 
             return Ok(boardDto);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBoard([FromBody] CreateBoardDto dto)
+        {
+
+            var board = new Board
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+
+            };
+            board.Tasks.Add(new TaskItem 
+            {
+                Name = "Task in Progress",
+                Description = "Work that i currently being done",
+                Status = BoardTaskStatus.InProgress,
+                DisplayOrder = 1
+            });
+            board.Tasks.Add(new TaskItem
+            {
+                Name = "Completed",
+                Description = "Work that has been finished successfully",
+                Status = BoardTaskStatus.Completed,
+                DisplayOrder = 2
+            });
+            board.Tasks.Add(new TaskItem
+            {
+                Name = "Won't Do",
+                Description = "Work that has been deprioritsed or cancelled",
+                Status = BoardTaskStatus.WontDo,
+                DisplayOrder = 3
+            });
+            board.Tasks.Add(new TaskItem
+            {
+                Name = "In Progress",
+                Description = "A second default task for the board",
+                Status = BoardTaskStatus.InProgress,
+                DisplayOrder = 4
+            });
+
+
+
+            return Ok();
+        }
     }
+}
