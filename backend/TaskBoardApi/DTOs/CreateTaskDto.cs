@@ -7,7 +7,7 @@ namespace TaskBoardApi.DTOs
         public string Name { get; set; }
         public string? Description { get; set; }
         public string Icon { get; set; }
-        public string Status { get; set; }
+        public BoardTaskStatus Status { get; set; }
 
     }
 }
