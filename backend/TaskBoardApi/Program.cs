@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using TaskBoardApi.Data;
 
@@ -12,7 +13,7 @@ builder.Services.AddControllers()
 
 
 // Add services to the container
-
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
