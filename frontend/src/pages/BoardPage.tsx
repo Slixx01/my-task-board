@@ -2,11 +2,10 @@ import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { getBoard } from "../api/boardsApi"
 import { useBoardStore } from "../store/boardStore"
+import BoardHeader from "../components/BoardHeader"
 
 
 function BoardPage() {
-
-    const board = useBoardStore(state => state.board)
     const setBoard = useBoardStore(state => state.setBoard)
 
     const { boardId } = useParams()
@@ -20,8 +19,7 @@ function BoardPage() {
 
     return (
         <div>
-            <h1>{board?.name}</h1>
-            <p>{board?.description}</p>
+            <BoardHeader />
         </div>
     )
 }
