@@ -24,14 +24,24 @@ function BoardPage() {
     }, [])
 
     return (
-        <div>
-            <BoardHeader />
-            {board?.items.map((task) => (
-                <TaskCard key={task.id} task={task} onSelect={setSelectedTask} />
-            ))}
-            {selectedTask && <TaskEditor task={selectedTask} onClose={() => setSelectedTask(null)}/>}
-            <button onClick={() => setIsAdding(true)}> Add New Task</button>
-            {isAdding && <TaskAdd onClose={() => setIsAdding(false)}/>}
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-8">
+            <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 p-8 w-full max-w-2xl">
+
+                <BoardHeader />
+                {board?.items.map((task) => (
+                    <TaskCard key={task.id} task={task} onSelect={setSelectedTask} />
+                ))}
+                {selectedTask && <TaskEditor task={selectedTask} onClose={() => setSelectedTask(null)} />}
+                <button
+                    onClick={() => setIsAdding(true)}
+                    className="w-full mt-4 p-4 rounded-xl bg-slate-800 text-slate-400 hover:bg-blue-900 hover:text-blue-300 transition-all text-left flex items-center gap-3 font-medium border border-slate-700"
+                >
+                    <span className="text-xl bg-amber-400 text-white rounded-lg w-8 h-8 flex items-center justify-center">+</span>
+                    Add new task
+                </button>
+                {isAdding && <TaskAdd onClose={() => setIsAdding(false)} />}
+
+            </div>
         </div>
     )
 }
