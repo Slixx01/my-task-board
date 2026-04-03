@@ -27,9 +27,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://my-task-board-silk.vercel.app")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.SetIsOriginAllowed(origin =>
+            origin.Contains("localhost") ||
+            origin.Contains("vercel.app"))
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
