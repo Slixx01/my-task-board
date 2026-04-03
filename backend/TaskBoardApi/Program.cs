@@ -27,32 +27,32 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://my-task-board-silk.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
 
-var app = builder.Build();
+
 
 
 
 // Configure the HTTP request pipeline
+var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
-
-app.UseHttpsRedirection();
-app.UseCors("AllowFrontend");
-app.UseAuthorization();
-app.MapControllers();
-
-
+// Run migrations first
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
+
+// Then configure pipeline
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
